@@ -76,6 +76,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<FuelStation | null>(null);
   const [photos, setPhotos] = useState<Record<number, string | null>>({});
+  const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
   const [reportFor, setReportFor] = useState<{ priceIdx: number } | null>(null);
   const [reportPrice, setReportPrice] = useState('');
   const [reportNote, setReportNote] = useState('');
@@ -166,6 +167,7 @@ export default function HomePage() {
     setSelected(s);
     setReportFor(null);
     setReportStatus('idle');
+    setMobileView('map'); // on mobile, switch to map when a station is tapped
     mapRef.current?.flyTo({ center: [s.lon, s.lat], zoom: 14, duration: 800 });
     fetchPhoto(s);
   };
@@ -295,11 +297,15 @@ export default function HomePage() {
         </div>
         {mode === 'route' && routeDistance != null && (
           <div className="routeInfo">
-            🛣️ {(routeDistance / 1000).toFixed(0)} km · ⏱ {formatDuration(routeDuration)} · ⛽ {stations.length} distributori lungo il percorso
+            🛣️ {(routeDistance / 1000).toFixed(0)} km · ⏱ {formatDuration(routeDuration)} · ⛽ {stations.length} distributori
           </div>
         )}
+        <div className="mobileViewToggle">
+          <button className={mobileView === 'list' ? 'active' : ''} onClick={() => setMobileView('list')}>📋 Lista {stations.length > 0 && `(${stations.length})`}</button>
+          <button className={mobileView === 'map' ? 'active' : ''} onClick={() => setMobileView('map')}>🗺️ Mappa</button>
+        </div>
       </header>
-      <main>
+      <main className={`view-${mobileView}`}>
         <div className="list">
           {stations.length === 0 && !loading && (
             <div className="empty">
