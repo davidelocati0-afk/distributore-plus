@@ -1,0 +1,289 @@
+* { box-sizing: border-box; padding: 0; margin: 0; }
+html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background: #f5f5f7; color: #1d1d1f; }
+button { font: inherit; cursor: pointer; }
+input { font: inherit; }
+a { color: inherit; text-decoration: none; }
+
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+
+header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5ea;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+header h1 .badge { font-size: 11px; background: #34c759; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 600; letter-spacing: 0.3px; }
+
+.modeTabs { display: flex; gap: 6px; }
+.modeTabs button {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #d2d2d7;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+.modeTabs button.active { background: #007aff; border-color: #007aff; color: #fff; }
+
+.searchBox { position: relative; flex: 1; }
+.searchBox input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d2d2d7;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}
+.searchBox input:focus { border-color: #007aff; }
+
+.routeInputs { display: flex; gap: 8px; align-items: stretch; }
+.routeBtn {
+  padding: 0 16px;
+  background: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.routeBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.routeInfo {
+  background: #eef6ff;
+  border: 1px solid #cfe4ff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #0051a8;
+}
+
+.routeEndpoint {
+  width: 28px; height: 28px;
+  background: #34c759;
+  color: #fff;
+  border: 3px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.routeEndpoint span, .routeEndpoint { line-height: 1; }
+.routeEndpoint.end { background: #ff3b30; }
+.routeEndpoint > * { display: block; transform: rotate(45deg); }
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #d2d2d7;
+  border-radius: 10px;
+  margin-top: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.suggestions div {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid #f5f5f7;
+}
+.suggestions div:hover { background: #f5f5f7; }
+
+.fuelChips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.fuelChips button {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #d2d2d7;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.fuelChips button.active {
+  background: #007aff;
+  border-color: #007aff;
+  color: #fff;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  main { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+}
+
+.list {
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid #e5e5ea;
+}
+
+.empty {
+  padding: 60px 24px;
+  text-align: center;
+  color: #86868b;
+}
+.empty .icon { font-size: 48px; margin-bottom: 12px; }
+
+.station {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.station:hover, .station.selected { background: #f5f5f7; }
+.station img, .station .imgPh {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #e5e5ea;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.station .info {
+  flex: 1;
+  min-width: 0;
+}
+.station .info .flag { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.station .info .addr { font-size: 12px; color: #86868b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+.station .info .dist { font-size: 11px; color: #aeaeb2; margin-top: 2px; }
+.station .price {
+  text-align: right;
+}
+.station .price .val {
+  font-size: 18px;
+  font-weight: 700;
+  color: #34c759;
+  font-variant-numeric: tabular-nums;
+}
+.station .price .self { font-size: 10px; color: #86868b; }
+.station .price .none { color: #86868b; font-size: 13px; }
+
+.mapWrap { position: relative; overflow: hidden; }
+.marker {
+  background: #34c759;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 14px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s;
+}
+.marker:hover { transform: scale(1.1); }
+.marker.none { background: #8e8e93; }
+.marker.selected { background: #007aff; transform: scale(1.2); z-index: 10; }
+
+.userMarker {
+  width: 18px; height: 18px;
+  background: #007aff;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(0,122,255,0.3);
+}
+
+.popup {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 220px;
+  max-width: 260px;
+}
+.popup img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; background: #e5e5ea; }
+.popup h3 { font-size: 14px; margin-bottom: 4px; }
+.popup p.addr { font-size: 11px; color: #86868b; margin-bottom: 8px; }
+.popup .priceList { display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; }
+.popup .priceRow { border-bottom: 1px solid #f0f0f0; padding-bottom: 6px; }
+.popup .priceRow:last-child { border-bottom: none; }
+.popup .rowMain { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; }
+.popup .rowMain .name { color: #1d1d1f; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 6px; font-weight: 500; }
+.popup .rowMain .name em { color: #86868b; font-style: normal; font-size: 10px; text-transform: uppercase; margin-left: 4px; }
+.popup .rowMain .v { font-weight: 700; font-variant-numeric: tabular-nums; color: #1d1d1f; }
+.popup .rowMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3px;
+}
+.popup .freshness { font-size: 10px; font-weight: 500; }
+.popup .freshness.fresh { color: #34c759; }
+.popup .freshness.medium { color: #ff9500; }
+.popup .freshness.stale { color: #ff3b30; }
+.popup .reportBtn {
+  background: none;
+  border: none;
+  color: #007aff;
+  font-size: 10px;
+  padding: 2px 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.popup .reportForm {
+  margin-top: 6px;
+  background: #f5f5f7;
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.popup .reportForm input {
+  padding: 6px 8px;
+  border: 1px solid #d2d2d7;
+  border-radius: 6px;
+  font-size: 12px;
+  width: 100%;
+  outline: none;
+}
+.popup .reportForm input:focus { border-color: #007aff; }
+.popup .reportActions { display: flex; gap: 6px; }
+.popup .reportActions button { flex: 1; padding: 6px; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.popup .reportActions .cancel { background: #e5e5ea; color: #1d1d1f; }
+.popup .reportActions .send { background: #007aff; color: #fff; }
+.popup .reportActions .send:disabled { opacity: 0.5; }
+.popup .reportOk { font-size: 12px; color: #34c759; text-align: center; padding: 6px; font-weight: 600; }
+.popup .reportErr { font-size: 10px; color: #ff3b30; }
+.popup .disclaimer { margin-top: 8px; font-size: 10px; color: #86868b; font-style: italic; text-align: center; }
+
+.loading { padding: 40px; text-align: center; color: #86868b; }

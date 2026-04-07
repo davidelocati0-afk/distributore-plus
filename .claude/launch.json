@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ff",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": ["/opt/homebrew/lib/node_modules/npm/bin/npm-cli.js", "run", "dev"],
+      "port": 3000
+    }
+  ]
+}
